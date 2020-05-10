@@ -19,7 +19,7 @@ namespace MyEventPresentations.Data.Sqlite
             _mapper = mapper;
         }
         
-        public int SavePresentation(Presentation presentation)
+        public Presentation SavePresentation(Presentation presentation)
         {
             if (presentation == null)
             {
@@ -38,7 +38,16 @@ namespace MyEventPresentations.Data.Sqlite
                     _presentationContext.Entry(dbPresentation).State = EntityState.Modified;
                 }
 
-                return _presentationContext.SaveChanges() != 0 ? dbPresentation.PresentationId : 0;
+                var result = _presentationContext.SaveChanges();
+
+                if (result > 0)
+                {
+                    // This is because the presentation object does not have the PresentationId and
+                    // we need to get this from EF
+                    presentation.PresentationId = dbPresentation.PresentationId;
+                }
+                
+                return result != 0 ? presentation : null;
             }
         }
 

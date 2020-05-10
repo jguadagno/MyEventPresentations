@@ -14,7 +14,7 @@ namespace MyEventPresentations.Data
             _presentationRepositoryStorage = presentationRepositoryStorage;
         }
         
-        public int SavePresentation(Presentation presentation)
+        public Presentation SavePresentation(Presentation presentation)
         {
             return _presentationRepositoryStorage.SavePresentation(presentation);
         }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyEventPresentations.Domain.Interfaces;
@@ -22,13 +20,13 @@ namespace MyEventPresentations.Api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Domain.Models.Presentation> Get()
+        public IEnumerable<Domain.Models.Presentation> GetAllPresentations()
         {
             return _presentationManager.GetPresentations();
         }
 
         [HttpGet("{id}")]
-        public Domain.Models.Presentation Get(int id)
+        public Domain.Models.Presentation GetPresentation(int id)
         {
             return _presentationManager.GetPresentation(id);
         }
@@ -38,5 +36,51 @@ namespace MyEventPresentations.Api.Controllers
         {
             return _presentationManager.GetScheduledPresentationsForPresentation(id);
         }
+
+        [HttpPost]
+        public ActionResult<Domain.Models.Presentation> SavePresentation(Domain.Models.Presentation presentation)
+        {
+            try
+            {
+                var result = _presentationManager.SavePresentation(presentation);
+                if (result != null)
+                {
+                    return CreatedAtAction(nameof(GetPresentation), new {id = presentation.PresentationId},
+                        presentation);
+                }
+                return Problem("Failed to insert the presentation");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to insert the presentation");
+                Console.WriteLine(e.ToString());
+                return Problem("Failed to insert the presentation");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdatePresentation(Domain.Models.Presentation presentation)
+        {
+            try
+            {
+                var result = _presentationManager.SavePresentation(presentation);
+                if (result != null)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return Problem("Failed to update the presentation");
+                }
+                    
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return Problem("Failed to update the presentation");
+            }
+        }
+        
+        // TODO: Implement Delete?
     }
 }

@@ -11,3 +11,44 @@ Cache-Control: no-cache
 GET https://localhost:5001/Presentations/1/Schedules
 Accept: */*
 Cache-Control: no-cache
+
+### Update Presentation
+PUT https://localhost:5001/Presentations/1
+Content-Type: application/json
+
+{
+  "presentationId": 1,
+  "title": "Title 1",
+  "abstract": "Abstract 1",
+  "moreInfoUri": "moreInfo",
+  "sourceCodeRepositoryUri": "sourceCode",
+  "powerpointUri": "powerpointUrl",
+  "videoUri": "videoUrl"
+}
+
+### Reset Presentation
+PUT https://localhost:5001/Presentations/1
+Content-Type: application/json
+
+{
+"presentationId": 1,
+"title": "Migrate It!",
+"abstract": "Do you have an \"old\" .NET Framework App? Let's see how we can port it, migrate it, and/or upgrade it to us a combination of .NET Core and .NET Standard to modernize it.",
+"moreInfoUri": "https://www.josephguadagno.net/presentations/migrate-it",
+"sourceCodeRepositoryUri": "https://github.com/jguadagno/migrate-it",
+"powerpointUri": "https://onedrive.live.com/embed?cid=406EE4C95978C038&resid=406EE4C95978C038%2176463&authkey=AInDP9QbEcT8bhc&em=2",
+"videoUri": null
+}
+
+### Create new Presentation
+POST https://localhost:5001/presentations
+Content-Type: application/json
+
+{
+  "title": "Inserted via API - Title 1",
+  "abstract": "Inserted via API - Abstract 1",
+  "moreInfoUri": "Inserted via API - moreInfo",
+  "sourceCodeRepositoryUri": "Inserted via API - sourceCode",
+  "powerpointUri": "Inserted via API - powerpointUrl",
+  "videoUri": "Inserted via API - videoUrl"
+}

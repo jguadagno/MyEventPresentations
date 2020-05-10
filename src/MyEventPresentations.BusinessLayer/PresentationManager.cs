@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading;
 using MyEventPresentations.Domain.Interfaces;
 using MyEventPresentations.Domain.Models;
 
@@ -13,8 +15,30 @@ namespace MyEventPresentations.BusinessLayer
             _presentationRepository = presentationRepository;
         }
         
-        public int SavePresentation(Presentation presentation)
+        public Domain.Models.Presentation SavePresentation(Presentation presentation)
         {
+            // Validate the fields
+            if (presentation == null)
+            {
+                throw new ArgumentNullException(nameof(presentation), "The presentation can not be null");
+            }
+
+            if (presentation.PresentationId < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(presentation),
+                    "The presentation id can not be less than 0");
+            }
+
+            if (string.IsNullOrEmpty(presentation.Title))
+            {
+                throw new ArgumentNullException(nameof(presentation), "The Title of the presentation can not be null");
+            }
+
+            if (string.IsNullOrEmpty(presentation.Abstract))
+            {
+                throw new ArgumentNullException(nameof(presentation), "The Abstract of a presentation can not be null");    
+            }
+
             return _presentationRepository.SavePresentation(presentation);
         }
 

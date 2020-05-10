@@ -6,7 +6,7 @@ namespace MyEventPresentations.Domain.Interfaces
 {
     public interface IPresentationRepositoryStorage
     {
-        public int SavePresentation(Presentation presentation);
+        public Presentation SavePresentation(Presentation presentation);
         public Presentation GetPresentation(int presentationId);
         public IEnumerable<Presentation> GetPresentations();
         public ScheduledPresentation GetScheduledPresentation(int scheduledPresentationId);
