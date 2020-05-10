@@ -1,0 +1,13 @@
+GET https://localhost:5001/Presentations
+Accept: */*
+Cache-Control: no-cache
+
+###
+GET https://localhost:5001/Presentations/1
+Accept: */*
+Cache-Control: no-cache
+
+###
+GET https://localhost:5001/Presentations/1/Schedules
+Accept: */*
+Cache-Control: no-cache

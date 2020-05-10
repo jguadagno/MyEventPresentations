@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\MyEventPresentations.BusinessLayer.Tests\MyEventPresentations.BusinessLayer.Tests.csproj" />
+      <ProjectReference Include="..\MyEventPresentations.BusinessLayer\MyEventPresentations.BusinessLayer.csproj" />
+      <ProjectReference Include="..\MyEventPresentations.Data.Sqlite\MyEventPresentations.Data.Sqlite.csproj" />
+      <ProjectReference Include="..\MyEventPresentations.Data\MyEventPresentations.Data.csproj" />
+      <ProjectReference Include="..\MyEventPresentations.Domain\MyEventPresentations.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3" />
+    </ItemGroup>
+
+
+</Project>

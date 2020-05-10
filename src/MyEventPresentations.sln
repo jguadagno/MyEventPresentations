@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyEventPresentations.Domain", "MyEventPresentations.Domain\MyEventPresentations.Domain.csproj", "{CFBAD9FC-79E0-4A9B-85D9-2204B54BAE39}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyEventPresentations.BusinessLayer", "MyEventPresentations.BusinessLayer\MyEventPresentations.BusinessLayer.csproj", "{3530001F-E8F4-4B4A-AA5B-3B859BB06128}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyEventPresentations.Data", "MyEventPresentations.Data\MyEventPresentations.Data.csproj", "{116FF311-6720-4C5D-AC83-3D84204A5E41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyEventPresentations.Data.Sqlite", "MyEventPresentations.Data.Sqlite\MyEventPresentations.Data.Sqlite.csproj", "{77C50AA2-3E7F-4779-8708-CAE95DE9EC08}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyEventPresentations.BusinessLayer.Tests", "MyEventPresentations.BusinessLayer.Tests\MyEventPresentations.BusinessLayer.Tests.csproj", "{B575E5B9-0762-4830-B5FF-3E32C5EF6462}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyEventPresentations.Api", "MyEventPresentations.Api\MyEventPresentations.Api.csproj", "{9893451E-12A7-480A-8AA4-FE8734B59BC2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InstallDocs", "InstallDocs", "{6EF05764-0584-4D6A-BFF3-BEED125C5802}"
+ProjectSection(SolutionItems) = preProject
+	Notes.md = Notes.md
+	Local-MyEventPresentations-Presentations-EndPoint.http = Local-MyEventPresentations-Presentations-EndPoint.http
+	readme.md = readme.md
+	..\readme.md = ..\readme.md
+EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFBAD9FC-79E0-4A9B-85D9-2204B54BAE39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFBAD9FC-79E0-4A9B-85D9-2204B54BAE39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFBAD9FC-79E0-4A9B-85D9-2204B54BAE39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFBAD9FC-79E0-4A9B-85D9-2204B54BAE39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3530001F-E8F4-4B4A-AA5B-3B859BB06128}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3530001F-E8F4-4B4A-AA5B-3B859BB06128}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3530001F-E8F4-4B4A-AA5B-3B859BB06128}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3530001F-E8F4-4B4A-AA5B-3B859BB06128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{116FF311-6720-4C5D-AC83-3D84204A5E41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{116FF311-6720-4C5D-AC83-3D84204A5E41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{116FF311-6720-4C5D-AC83-3D84204A5E41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{116FF311-6720-4C5D-AC83-3D84204A5E41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77C50AA2-3E7F-4779-8708-CAE95DE9EC08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C50AA2-3E7F-4779-8708-CAE95DE9EC08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C50AA2-3E7F-4779-8708-CAE95DE9EC08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C50AA2-3E7F-4779-8708-CAE95DE9EC08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B575E5B9-0762-4830-B5FF-3E32C5EF6462}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B575E5B9-0762-4830-B5FF-3E32C5EF6462}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B575E5B9-0762-4830-B5FF-3E32C5EF6462}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B575E5B9-0762-4830-B5FF-3E32C5EF6462}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9893451E-12A7-480A-8AA4-FE8734B59BC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9893451E-12A7-480A-8AA4-FE8734B59BC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9893451E-12A7-480A-8AA4-FE8734B59BC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9893451E-12A7-480A-8AA4-FE8734B59BC2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
