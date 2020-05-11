@@ -9,6 +9,10 @@ dotnet ef migrations add InitialCreate --startup-project ../MyEventPresentations
 dotnet ef database update --startup-project ../MyEventPresentations.Api
 ```
 
+## API Design
+
+Based off of [Create a web API](https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api) and [Web API with MongoDB](https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app)
+
 ## Azurite
 
 Install [documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyEventPresentations.Domain.Interfaces;
+using MyEventPresentations.Domain.Models;
 
 namespace MyEventPresentations.Api.Controllers
 {
@@ -81,6 +82,26 @@ namespace MyEventPresentations.Api.Controllers
             }
         }
         
-        // TODO: Implement Delete?
+        [HttpDelete("{id}")]
+        public ActionResult DeletePresentation(int id)
+        {
+            try
+            {
+                var deleted = _presentationManager.DeletePresentation(id);
+                if (deleted)
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return Problem("Failed to delete the presentation");
+            }
+        }
     }
 }

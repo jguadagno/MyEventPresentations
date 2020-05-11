@@ -52,6 +52,11 @@ namespace MyEventPresentations.BusinessLayer
             return _presentationRepository.GetPresentations();
         }
 
+        public bool DeletePresentation(int id)
+        {
+            return _presentationRepository.DeletePresentation(id);
+        }
+
         public ScheduledPresentation GetScheduledPresentation(int scheduledPresentationId)
         {
             return _presentationRepository.GetScheduledPresentation(scheduledPresentationId);

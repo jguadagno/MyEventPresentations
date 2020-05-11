@@ -70,6 +70,21 @@ namespace MyEventPresentations.Data.Sqlite
             }
         }
 
+        public bool DeletePresentation(int presentationId)
+        {
+            using (_presentationContext)
+            {
+                var dbPresentation = _presentationContext.Presentations.Find(presentationId);
+                if (dbPresentation == null)
+                {
+                    return false;
+                }
+
+                _presentationContext.Presentations.Remove(dbPresentation);
+                return _presentationContext.SaveChanges() != 0;
+            }
+        }
+
         public ScheduledPresentation GetScheduledPresentation(int scheduledPresentationId)
         {
             using (_presentationContext)

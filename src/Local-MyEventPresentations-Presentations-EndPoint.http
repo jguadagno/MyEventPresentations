@@ -52,3 +52,6 @@ Content-Type: application/json
   "powerpointUri": "Inserted via API - powerpointUrl",
   "videoUri": "Inserted via API - videoUrl"
 }
+
+### Delete a Presentation
+DELETE https://localhost:5001/presentations/2

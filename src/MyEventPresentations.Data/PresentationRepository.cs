@@ -29,6 +29,11 @@ namespace MyEventPresentations.Data
             return _presentationRepositoryStorage.GetPresentations();
         }
 
+        public bool DeletePresentation(int presentationId)
+        {
+            return _presentationRepositoryStorage.DeletePresentation(presentationId);
+        }
+
         public ScheduledPresentation GetScheduledPresentation(int scheduledPresentationId)
         {
             return _presentationRepositoryStorage.GetScheduledPresentation(scheduledPresentationId);
