@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MyEventPresentations.Domain.Interfaces;
 using MyEventPresentations.Domain.Models;
 
@@ -14,7 +15,7 @@ namespace MyEventPresentations.BusinessLayer
             _presentationRepository = presentationRepository;
         }
         
-        public Presentation SavePresentation(Presentation presentation)
+        public Task<Presentation> SavePresentationAsync(Presentation presentation)
         {
             // Validate the fields
             if (presentation == null)
@@ -38,35 +39,35 @@ namespace MyEventPresentations.BusinessLayer
                 throw new ArgumentNullException(nameof(presentation.Abstract), "The Abstract of the presentation can not be null");    
             }
 
-            return _presentationRepository.SavePresentation(presentation);
+            return _presentationRepository.SavePresentationAsync(presentation);
         }
 
-        public Presentation GetPresentation(int presentationId)
+        public Task<Presentation> GetPresentationAsync(int presentationId)
         {
-            return _presentationRepository.GetPresentation(presentationId);
+            return _presentationRepository.GetPresentationAsync(presentationId);
         }
 
-        public IEnumerable<Presentation> GetPresentations()
+        public Task<IEnumerable<Presentation>> GetPresentationsAsync()
         {
-            return _presentationRepository.GetPresentations();
+            return _presentationRepository.GetPresentationsAsync();
         }
 
-        public bool DeletePresentation(int id)
+        public Task<bool> DeletePresentationAsync(int id)
         {
-            return _presentationRepository.DeletePresentation(id);
+            return _presentationRepository.DeletePresentationAsync(id);
         }
 
-        public ScheduledPresentation GetScheduledPresentation(int scheduledPresentationId)
+        public Task<ScheduledPresentation> GetScheduledPresentationAsync(int scheduledPresentationId)
         {
-            return _presentationRepository.GetScheduledPresentation(scheduledPresentationId);
+            return _presentationRepository.GetScheduledPresentationAsync(scheduledPresentationId);
         }
 
-        public IEnumerable<ScheduledPresentation> GetScheduledPresentationsForPresentation(int presentationId)
+        public Task<IEnumerable<ScheduledPresentation>> GetScheduledPresentationsForPresentationAsync(int presentationId)
         {
-            return _presentationRepository.GetScheduledPresentationsForPresentation(presentationId);
+            return _presentationRepository.GetScheduledPresentationsForPresentationAsync(presentationId);
         }
 
-        public ScheduledPresentation SaveScheduledPresentation(ScheduledPresentation scheduledPresentation)
+        public Task<ScheduledPresentation> SaveScheduledPresentationAsync(ScheduledPresentation scheduledPresentation)
         {
             // Validate the fields
             if (scheduledPresentation == null)
@@ -87,7 +88,7 @@ namespace MyEventPresentations.BusinessLayer
                     "The start time of the presentation can not be greater then the end time");
             }
 
-            return _presentationRepository.SaveScheduledPresentation(scheduledPresentation);
+            return _presentationRepository.SaveScheduledPresentationAsync(scheduledPresentation);
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Moq;
 using MyEventPresentations.Domain.Interfaces;
 using MyEventPresentations.Domain.Models;
@@ -10,100 +11,102 @@ namespace MyEventPresentations.BusinessLayer.Tests
 {
     public class PresentationManagerTests
     {
-
         [Fact]
-        public void SavePresentation_WithNullPresentation_ShouldThrowException()
+        public async Task SavePresentation_WithNullPresentation_ShouldThrowException()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock.Setup(presentationRepository =>
-                    presentationRepository.SavePresentation(It.IsAny<Presentation>()));
+                presentationRepository.SavePresentationAsync(It.IsAny<Presentation>()));
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
-            
+
             // Act
-            var ex =
-                Assert.Throws<ArgumentNullException>(() => presentationManager.SavePresentation(null));
+            var ex = await
+                Assert.ThrowsAsync<ArgumentNullException>(() => presentationManager.SavePresentationAsync(null));
 
             // Assert
             Assert.Equal("presentation", ex.ParamName);
             Assert.Equal("The presentation can not be null (Parameter 'presentation')", ex.Message);
         }
-        
+
         [Fact]
-        public void SavePresentation_WithPresentationIdLessThanOne_ShouldThrowException()
+        public async Task SavePresentation_WithPresentationIdLessThanOne_ShouldThrowException()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock.Setup(presentationRepository =>
-                    presentationRepository.SavePresentation(It.IsAny<Presentation>()));
+                presentationRepository.SavePresentationAsync(It.IsAny<Presentation>()));
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
             var presentation = new Presentation
                 {PresentationId = 0, Abstract = "Abstract", Title = "Title", PowerpointUri = "PowerpointUri"};
-            
+
             // Act
-            var ex =
-                Assert.Throws<ArgumentOutOfRangeException>(() => presentationManager.SavePresentation(presentation));
-            
+            var ex = await
+                Assert.ThrowsAsync<ArgumentOutOfRangeException>(() =>
+                    presentationManager.SavePresentationAsync(presentation));
+
             // Assert
             Assert.Equal("presentation", ex.ParamName);
             Assert.Equal("The presentation id can not be less than 1 (Parameter 'presentation')", ex.Message);
         }
-        
+
         [Fact]
-        public void SavePresentation_WithNullTitle_ShouldThrowException()
+        public async Task SavePresentation_WithNullTitle_ShouldThrowException()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock.Setup(presentationRepository =>
-                    presentationRepository.SavePresentation(It.IsAny<Presentation>()));
+                presentationRepository.SavePresentationAsync(It.IsAny<Presentation>()));
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
             var presentation = new Presentation
                 {PresentationId = 1, Abstract = "Abstract", Title = null, PowerpointUri = "PowerpointUri"};
-            
+
             // Act
-            var ex =
-                Assert.Throws<ArgumentNullException>(() => presentationManager.SavePresentation(presentation));
-            
+            var ex = await
+                Assert.ThrowsAsync<ArgumentNullException>(() =>
+                    presentationManager.SavePresentationAsync(presentation));
+
             // Assert
             Assert.Equal("Title", ex.ParamName);
             Assert.Equal("The Title of the presentation can not be null (Parameter 'Title')", ex.Message);
         }
-        
+
         [Fact]
-        public void SavePresentation_WithNullAbstract_ShouldThrowException()
+        public async Task SavePresentation_WithNullAbstract_ShouldThrowException()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock.Setup(presentationRepository =>
-                    presentationRepository.SavePresentation(It.IsAny<Presentation>()));
+                presentationRepository.SavePresentationAsync(It.IsAny<Presentation>()));
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
             var presentation = new Presentation
                 {PresentationId = 1, Abstract = null, Title = "Title", PowerpointUri = "PowerpointUri"};
-            
+
             // Act
-            var ex =
-                Assert.Throws<ArgumentNullException>(() => presentationManager.SavePresentation(presentation));
-            
+            var ex = await
+                Assert.ThrowsAsync<ArgumentNullException>(() =>
+                    presentationManager.SavePresentationAsync(presentation));
+
             // Assert
             Assert.Equal("Abstract", ex.ParamName);
             Assert.Equal("The Abstract of the presentation can not be null (Parameter 'Abstract')", ex.Message);
         }
-                
+
         [Fact]
-        public void SavePresentation_WithValidPresentation_ShouldReturnPresentation()
+        public async Task SavePresentation_WithValidPresentation_ShouldReturnPresentation()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock.Setup(presentationRepository =>
-                    presentationRepository.SavePresentation(It.IsAny<Presentation>()))
-                .Returns((Presentation presentationInput) => presentationInput);
+                    presentationRepository.SavePresentationAsync(It.IsAny<Presentation>()))
+                .ReturnsAsync((Presentation presentationInput) => presentationInput);
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
             var presentation = new Presentation
                 {PresentationId = 1, Abstract = "Abstract", Title = "Title", PowerpointUri = "PowerpointUri"};
-            
+
             // Act
-            var savedPresentation =  presentationManager.SavePresentation(presentation);
-            
+            var savedPresentation = await presentationManager.SavePresentationAsync(presentation);
+
             // Assert
             Assert.NotNull(savedPresentation);
             Assert.Equal(presentation.PresentationId, savedPresentation.PresentationId);
@@ -111,21 +114,27 @@ namespace MyEventPresentations.BusinessLayer.Tests
             Assert.Equal(presentation.Title, savedPresentation.Title);
             Assert.Equal(presentation.PowerpointUri, savedPresentation.PowerpointUri);
         }
-        
+
         [Fact]
-        public void GetPresentation_ShouldReturnPresentation()
+        public async Task GetPresentation_ShouldReturnPresentation()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
-            presentationRepositoryMock.Setup(presentationRepository => presentationRepository.GetPresentation(It.IsAny<int>()))
-                .Returns((int id) => new Presentation
-                    {PresentationId = id, Abstract = "Abstract", Title = "Title", PowerpointUri = "PowerpointUri"});
+            presentationRepositoryMock.Setup(presentationRepository =>
+                    presentationRepository.GetPresentationAsync(It.IsAny<int>()))
+                .ReturnsAsync((int id) => new Presentation
+                {
+                    PresentationId = id,
+                    Abstract = "Abstract",
+                    Title = "Title",
+                    PowerpointUri = "PowerpointUri",
+                });
 
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
             var presentationId = 15; // any Random Number will do
-            
+
             // Act
-            var presentation = presentationManager.GetPresentation(presentationId);
+            var presentation = await presentationManager.GetPresentationAsync(presentationId);
 
             // Assert
             Assert.NotNull(presentation);
@@ -134,26 +143,25 @@ namespace MyEventPresentations.BusinessLayer.Tests
             Assert.Equal("Title", presentation.Title);
             Assert.Equal("PowerpointUri", presentation.PowerpointUri);
         }
-        
+
         [Fact]
-        public void GetPresentations_ShouldReturnListOfPresentations()
+        public async Task GetPresentations_ShouldReturnListOfPresentations()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
-            presentationRepositoryMock.Setup(presentationRepository => presentationRepository.GetPresentations())
-                .Returns(new List<Presentation>
+            presentationRepositoryMock.Setup(presentationRepository => presentationRepository.GetPresentationsAsync())
+                .ReturnsAsync(new List<Presentation>
                 {
                     new Presentation
                         {PresentationId = 1, Abstract = "Abstract", Title = "Title", PowerpointUri = "PowerpointUri"},
                     new Presentation
                         {PresentationId = 2, Abstract = "Abstract", Title = "Title", PowerpointUri = "PowerpointUri"},
-
                 });
 
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
-            
+
             // Act
-            var presentations = presentationManager.GetPresentations();
+            var presentations = await presentationManager.GetPresentationsAsync();
 
             // Assert
             Assert.NotNull(presentations);
@@ -171,54 +179,54 @@ namespace MyEventPresentations.BusinessLayer.Tests
         }
 
         [Fact]
-        public void DeletePresentation_ShouldReturnTrue()
+        public async Task DeletePresentation_ShouldReturnTrue()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
-                .Setup(presentationRepository => presentationRepository.DeletePresentation(It.IsAny<int>()))
-                .Returns(true);
+                .Setup(presentationRepository => presentationRepository.DeletePresentationAsync(It.IsAny<int>()))
+                .ReturnsAsync(true);
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
-            
+
             // Act
-            var deletedPresentation = presentationManager.DeletePresentation(1); // Any number
-            
+            var deletedPresentation = await presentationManager.DeletePresentationAsync(1); // Any number
+
             // Assert
             Assert.True(deletedPresentation);
         }
 
         [Fact]
-        public void GetScheduledPresentation_ShouldReturnAScheduledPresentations()
+        public async Task GetScheduledPresentation_ShouldReturnAScheduledPresentations()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
-                .Setup(presentationRepository => presentationRepository.GetScheduledPresentation(It.IsAny<int>()))
-                .Returns(new ScheduledPresentation
+                .Setup(presentationRepository => presentationRepository.GetScheduledPresentationAsync(It.IsAny<int>()))
+                .ReturnsAsync(new ScheduledPresentation
                 {
                     ScheduledPresentationId = 1, AttendeeCount = 1, Presentation = new Presentation()
                 });
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
-            
+
             // Act
-            var scheduledPresentation = presentationManager.GetScheduledPresentation(1);
-            
+            var scheduledPresentation = await presentationManager.GetScheduledPresentationAsync(1);
+
             // Assert
             Assert.NotNull(scheduledPresentation);
             Assert.NotNull(scheduledPresentation.Presentation);
             Assert.Equal(1, scheduledPresentation.ScheduledPresentationId);
             Assert.Equal(1, scheduledPresentation.AttendeeCount);
         }
-        
+
         [Fact]
-        public void GetScheduledPresentation_ShouldReturnAListScheduledPresentations()
+        public async Task GetScheduledPresentation_ShouldReturnAListScheduledPresentations()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
                 .Setup(presentationRepository =>
-                    presentationRepository.GetScheduledPresentationsForPresentation(It.IsAny<int>()))
-                .Returns((int presentationIdInput) => new List<ScheduledPresentation>
+                    presentationRepository.GetScheduledPresentationsForPresentationAsync(It.IsAny<int>()))
+                .ReturnsAsync((int presentationIdInput) => new List<ScheduledPresentation>
                 {
                     new ScheduledPresentation
                     {
@@ -233,10 +241,11 @@ namespace MyEventPresentations.BusinessLayer.Tests
                 });
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
             var presentationId = 15; // Can be any int
-            
+
             // Act
-            var scheduledPresentations = presentationManager.GetScheduledPresentationsForPresentation(presentationId);
-            
+            var scheduledPresentations =
+                await presentationManager.GetScheduledPresentationsForPresentationAsync(presentationId);
+
             // Assert
             Assert.NotNull(scheduledPresentations);
             var scheduledPresentationsAsList = scheduledPresentations.ToList();
@@ -252,80 +261,88 @@ namespace MyEventPresentations.BusinessLayer.Tests
         }
 
         [Fact]
-        public void SaveScheduledPresentation_WithNullScheduledPresentation_ShouldThrowException()
+        public async Task SaveScheduledPresentation_WithNullScheduledPresentation_ShouldThrowException()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
-                .Setup(presentationRepository => presentationRepository.SaveScheduledPresentation(null));
+                .Setup(presentationRepository => presentationRepository.SaveScheduledPresentationAsync(null));
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
-            
+
             // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => presentationManager.SaveScheduledPresentation(null));
+            var ex = await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                presentationManager.SaveScheduledPresentationAsync(null));
 
             // Assert
             Assert.Equal("scheduledPresentation", ex.ParamName);
             Assert.Equal("The scheduled presentation can not be null (Parameter 'scheduledPresentation')", ex.Message);
         }
-        
+
         [Fact]
-        public void SaveScheduledPresentation_WithNullPresentation_ShouldThrowException()
+        public async Task SaveScheduledPresentation_WithNullPresentation_ShouldThrowException()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
-                .Setup(presentationRepository => presentationRepository.SaveScheduledPresentation(It.IsAny<ScheduledPresentation>()));
+                .Setup(presentationRepository =>
+                    presentationRepository.SaveScheduledPresentationAsync(It.IsAny<ScheduledPresentation>()));
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
-            
+
             var scheduledPresentation = new ScheduledPresentation
             {
                 Presentation = null
             };
-            
+
             // Act
-            var ex = Assert.Throws<ArgumentNullException>(() => presentationManager.SaveScheduledPresentation(scheduledPresentation));
+            var ex = await Assert.ThrowsAsync<ArgumentNullException>(() =>
+                presentationManager.SaveScheduledPresentationAsync(scheduledPresentation));
 
             // Assert
             Assert.Equal("Presentation", ex.ParamName);
             Assert.Equal("The presentation can not be null (Parameter 'Presentation')", ex.Message);
         }
-        
+
         [Fact]
-        public void SaveScheduledPresentation_WithStartTimeGreaterThanEndTime_ShouldThrowException()
+        public async Task SaveScheduledPresentation_WithStartTimeGreaterThanEndTime_ShouldThrowException()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
-                .Setup(presentationRepository => presentationRepository.SaveScheduledPresentation(It.IsAny<ScheduledPresentation>()));
+                .Setup(presentationRepository =>
+                    presentationRepository.SaveScheduledPresentationAsync(It.IsAny<ScheduledPresentation>()));
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
             var startTime = DateTime.Now;
-            
+
             var scheduledPresentation = new ScheduledPresentation
             {
                 Presentation = new Presentation(),
                 StartTime = startTime,
                 EndTime = startTime.AddMinutes(-1)
             };
-            
+
             // Act
-            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => presentationManager.SaveScheduledPresentation(scheduledPresentation));
+            var ex = await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() =>
+                presentationManager.SaveScheduledPresentationAsync(scheduledPresentation));
 
             // Assert
             Assert.Equal("StartTime", ex.ParamName);
             Assert.Equal(startTime, ex.ActualValue);
-            Assert.StartsWith("The start time of the presentation can not be greater then the end time (Parameter 'StartTime')", ex.Message);
+            Assert.StartsWith(
+                "The start time of the presentation can not be greater then the end time (Parameter 'StartTime')",
+                ex.Message);
         }
 
         [Fact]
-        public void SaveScheduledPresentation_WithValidScheduledPresentation_ShouldReturnScheduledPresentation()
+        public async Task SaveScheduledPresentation_WithValidScheduledPresentation_ShouldReturnScheduledPresentation()
         {
             // Arrange
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
-                .Setup(presentationRepository => presentationRepository.SaveScheduledPresentation(It.IsAny<ScheduledPresentation>()))
-                .Returns<ScheduledPresentation>((scheduledPresentationInput) => scheduledPresentationInput);
+                .Setup(presentationRepository =>
+                    presentationRepository.SaveScheduledPresentationAsync(It.IsAny<ScheduledPresentation>()))
+                .ReturnsAsync((ScheduledPresentation scheduledPresentationInput) => scheduledPresentationInput);
             var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
-            
+
             var startTime = DateTime.Now;
             var scheduledPresentation = new ScheduledPresentation
             {
@@ -333,10 +350,11 @@ namespace MyEventPresentations.BusinessLayer.Tests
                 StartTime = startTime,
                 EndTime = startTime.AddMinutes(1)
             };
-            
+
             // Act
-            var savedScheduledPresentation = presentationManager.SaveScheduledPresentation(scheduledPresentation);
-            
+            var savedScheduledPresentation =
+                await presentationManager.SaveScheduledPresentationAsync(scheduledPresentation);
+
             // Assert
             Assert.NotNull(savedScheduledPresentation);
             Assert.NotNull(savedScheduledPresentation.Presentation);

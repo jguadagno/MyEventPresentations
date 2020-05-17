@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyEventPresentations.Domain.Interfaces;
@@ -20,17 +20,17 @@ namespace MyEventPresentations.Api.Controllers
         }
         
         [HttpGet("{id}")]
-        public Domain.Models.ScheduledPresentation Get(int id)
+        public Task<Domain.Models.ScheduledPresentation> Get(int id)
         {
-            return _presentationManager.GetScheduledPresentation(id);
+            return _presentationManager.GetScheduledPresentationAsync(id);
         }
         
         [HttpPost]
-        public ActionResult<Domain.Models.ScheduledPresentation> SaveScheduledPresentation(Domain.Models.ScheduledPresentation scheduledPresentation)
+        public async Task <ActionResult<Domain.Models.ScheduledPresentation>> SaveScheduledPresentation(Domain.Models.ScheduledPresentation scheduledPresentation)
         {
             try
             {
-                var result = _presentationManager.SaveScheduledPresentation(scheduledPresentation);
+                var result = await _presentationManager.SaveScheduledPresentationAsync(scheduledPresentation);
                 if (result != null)
                 {
                     return CreatedAtAction(nameof(Get), new {id = scheduledPresentation.ScheduledPresentationId},

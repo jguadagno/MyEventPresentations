@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MyEventPresentations.Domain.Interfaces;
@@ -20,7 +20,7 @@ namespace MyEventPresentations.Data.Sqlite
             _mapper = mapper;
         }
         
-        public Presentation SavePresentation(Presentation presentation)
+        public async Task<Presentation> SavePresentationAsync(Presentation presentation)
         {
             if (presentation == null)
             {
@@ -28,18 +28,18 @@ namespace MyEventPresentations.Data.Sqlite
             }
 
             var dbPresentation = _mapper.Map<Sqlite.Models.Presentation>(presentation);
-            using (_presentationContext)
+            await using (_presentationContext)
             {
                 if (dbPresentation.PresentationId == 0)
                 {
-                    _presentationContext.Presentations.Add(dbPresentation);
+                    await _presentationContext.Presentations.AddAsync(dbPresentation);
                 }
                 else
                 {
                     _presentationContext.Entry(dbPresentation).State = EntityState.Modified;
                 }
 
-                var result = _presentationContext.SaveChanges();
+                var result = await _presentationContext.SaveChangesAsync();
 
                 if (result > 0)
                 {
@@ -52,62 +52,62 @@ namespace MyEventPresentations.Data.Sqlite
             }
         }
 
-        public Presentation GetPresentation(int presentationId)
+        public async Task<Presentation> GetPresentationAsync(int presentationId)
         {
-            using (_presentationContext)
+            await using (_presentationContext)
             {
-                var presentation =
-                    _presentationContext.Presentations.FirstOrDefault(p => p.PresentationId == presentationId);
+                var presentation = 
+                    _presentationContext.Presentations.FirstOrDefaultAsync(p => p.PresentationId == presentationId);
                 return _mapper.Map<Presentation>(presentation);
             }
         }
 
-        public IEnumerable<Presentation> GetPresentations()
+        public async Task<IEnumerable<Presentation>> GetPresentationsAsync()
         {
-            using (_presentationContext)
+            await using (_presentationContext)
             {
-                var presentations = _presentationContext.Presentations;
+                var presentations = _presentationContext.Presentations.AsAsyncEnumerable();
                 return _mapper.Map<List<Presentation>>(presentations);
             }
         }
 
-        public bool DeletePresentation(int presentationId)
+        public async Task<bool> DeletePresentationAsync(int presentationId)
         {
-            using (_presentationContext)
+            await using (_presentationContext)
             {
-                var dbPresentation = _presentationContext.Presentations.Find(presentationId);
+                var dbPresentation = await _presentationContext.Presentations.FindAsync(presentationId);
                 if (dbPresentation == null)
                 {
                     return false;
                 }
 
                 _presentationContext.Presentations.Remove(dbPresentation);
-                return _presentationContext.SaveChanges() != 0;
+                return await _presentationContext.SaveChangesAsync() != 0;
             }
         }
 
-        public ScheduledPresentation GetScheduledPresentation(int scheduledPresentationId)
+        public async Task<ScheduledPresentation> GetScheduledPresentationAsync(int scheduledPresentationId)
         {
-            using (_presentationContext)
+            await using (_presentationContext)
             {
                 var presentation = _presentationContext.ScheduledPresentations
-                    .FirstOrDefault(p => p.ScheduledPresentationId == scheduledPresentationId);
+                    .FirstOrDefaultAsync(p => p.ScheduledPresentationId == scheduledPresentationId);
                 return _mapper.Map<ScheduledPresentation>(presentation);
             }
         }
 
-        public IEnumerable<ScheduledPresentation> GetScheduledPresentationsForPresentation(int presentationId)
+        public async Task<IEnumerable<ScheduledPresentation>> GetScheduledPresentationsForPresentationAsync(int presentationId)
         {
-            using (_presentationContext)
+            await using (_presentationContext)
             {
                 var presentations =
                     _presentationContext.ScheduledPresentations
-                        .Where(p => p.Presentation.PresentationId == presentationId);
+                        .Where(p => p.Presentation.PresentationId == presentationId).ToListAsync();
                 return _mapper.Map<List<ScheduledPresentation>>(presentations);
             }
         }
 
-        public ScheduledPresentation SaveScheduledPresentation(ScheduledPresentation scheduledPresentation)
+        public async Task<ScheduledPresentation> SaveScheduledPresentationAsync(ScheduledPresentation scheduledPresentation)
         {
             if (scheduledPresentation == null)
             {
@@ -121,11 +121,11 @@ namespace MyEventPresentations.Data.Sqlite
             
             var dbScheduledPresentation = _mapper.Map<Sqlite.Models.ScheduledPresentation>(scheduledPresentation);
 
-            using (_presentationContext)
+            await using (_presentationContext)
             {
                 if (scheduledPresentation.ScheduledPresentationId == 0)
                 {
-                    var presentation = _presentationContext.Presentations.FirstOrDefault(p =>
+                    var presentation = await _presentationContext.Presentations.FirstOrDefaultAsync(p =>
                         p.PresentationId == scheduledPresentation.Presentation.PresentationId);
                     if (presentation == null)
                     {
@@ -148,7 +148,7 @@ namespace MyEventPresentations.Data.Sqlite
                     _presentationContext.Entry(dbScheduledPresentation).State = EntityState.Modified;
                 }
 
-                var result = _presentationContext.SaveChanges();
+                var result = await _presentationContext.SaveChangesAsync();
 
                 if (result > 0)
                 {

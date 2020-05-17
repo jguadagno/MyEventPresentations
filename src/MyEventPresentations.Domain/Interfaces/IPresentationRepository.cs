@@ -1,17 +1,17 @@
-using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using MyEventPresentations.Domain.Models;
 
 namespace MyEventPresentations.Domain.Interfaces
 {
     public interface IPresentationRepository
     {
-        public Presentation SavePresentation(Presentation presentation);
-        public Presentation GetPresentation(int presentationId);
-        public IEnumerable<Models.Presentation> GetPresentations();
-        public ScheduledPresentation GetScheduledPresentation(int scheduledPresentationId);
-        public IEnumerable<ScheduledPresentation> GetScheduledPresentationsForPresentation(int presentationId);
-        public bool DeletePresentation(int presentationId);
-        public ScheduledPresentation SaveScheduledPresentation(ScheduledPresentation scheduledPresentation);
+        public Task<Presentation> SavePresentationAsync(Presentation presentation);
+        public Task<Presentation> GetPresentationAsync(int presentationId);
+        public Task<IEnumerable<Presentation>> GetPresentationsAsync();
+        public Task<ScheduledPresentation> GetScheduledPresentationAsync(int scheduledPresentationId);
+        public Task<IEnumerable<ScheduledPresentation>> GetScheduledPresentationsForPresentationAsync(int presentationId);
+        public Task<bool> DeletePresentationAsync(int presentationId);
+        public Task<ScheduledPresentation> SaveScheduledPresentationAsync(ScheduledPresentation scheduledPresentation);
     }
 }

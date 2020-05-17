@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyEventPresentations.Domain.Interfaces;
+using MyEventPresentations.Domain.Models;
 
 namespace MyEventPresentations.Api.Controllers
 {
@@ -20,29 +22,29 @@ namespace MyEventPresentations.Api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Domain.Models.Presentation> GetAllPresentations()
+        public async Task<IEnumerable<Domain.Models.Presentation>> GetAllPresentations()
         {
-            return _presentationManager.GetPresentations();
+            return await _presentationManager.GetPresentationsAsync();
         }
 
         [HttpGet("{id}")]
-        public Domain.Models.Presentation GetPresentation(int id)
+        public Task<Presentation> GetPresentation(int id)
         {
-            return _presentationManager.GetPresentation(id);
+            return _presentationManager.GetPresentationAsync(id);
         }
 
         [HttpGet("{id}/schedules")]
-        public IEnumerable<Domain.Models.ScheduledPresentation> GetScheduledPresentationsForPresentation(int id)
+        public Task<IEnumerable<ScheduledPresentation>> GetScheduledPresentationsForPresentation(int id)
         {
-            return _presentationManager.GetScheduledPresentationsForPresentation(id);
+            return _presentationManager.GetScheduledPresentationsForPresentationAsync(id);
         }
 
         [HttpPost]
-        public ActionResult<Domain.Models.Presentation> SavePresentation(Domain.Models.Presentation presentation)
+        public async Task<ActionResult<Domain.Models.Presentation>> SavePresentation(Domain.Models.Presentation presentation)
         {
             try
             {
-                var result = _presentationManager.SavePresentation(presentation);
+                var result = await _presentationManager.SavePresentationAsync(presentation);
                 if (result != null)
                 {
                     return CreatedAtAction(nameof(GetPresentation), new {id = presentation.PresentationId},
@@ -59,11 +61,11 @@ namespace MyEventPresentations.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdatePresentation(Domain.Models.Presentation presentation)
+        public async Task<IActionResult> UpdatePresentation(Presentation presentation)
         {
             try
             {
-                var result = _presentationManager.SavePresentation(presentation);
+                var result = await _presentationManager.SavePresentationAsync(presentation);
                 if (result != null)
                 {
                     return NoContent();
@@ -82,11 +84,11 @@ namespace MyEventPresentations.Api.Controllers
         }
         
         [HttpDelete("{id}")]
-        public ActionResult DeletePresentation(int id)
+        public async Task<ActionResult> DeletePresentation(int id)
         {
             try
             {
-                var deleted = _presentationManager.DeletePresentation(id);
+                var deleted = await _presentationManager.DeletePresentationAsync(id);
                 if (deleted)
                 {
                     return NoContent();

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MyEventPresentations.Domain.Interfaces;
 using MyEventPresentations.Domain.Models;
 
@@ -14,39 +14,39 @@ namespace MyEventPresentations.Data
             _presentationRepositoryStorage = presentationRepositoryStorage;
         }
         
-        public Presentation SavePresentation(Presentation presentation)
+        public Task<Presentation> SavePresentationAsync(Presentation presentation)
         {
-            return _presentationRepositoryStorage.SavePresentation(presentation);
+            return _presentationRepositoryStorage.SavePresentationAsync(presentation);
         }
 
-        public Presentation GetPresentation(int presentationId)
+        public Task<Presentation> GetPresentationAsync(int presentationId)
         {
-            return _presentationRepositoryStorage.GetPresentation(presentationId);
+            return _presentationRepositoryStorage.GetPresentationAsync(presentationId);
         }
 
-        public IEnumerable<Presentation> GetPresentations()
+        public Task<IEnumerable<Presentation>> GetPresentationsAsync()
         {
-            return _presentationRepositoryStorage.GetPresentations();
+            return _presentationRepositoryStorage.GetPresentationsAsync();
         }
 
-        public bool DeletePresentation(int presentationId)
+        public Task<bool> DeletePresentationAsync(int presentationId)
         {
-            return _presentationRepositoryStorage.DeletePresentation(presentationId);
+            return _presentationRepositoryStorage.DeletePresentationAsync(presentationId);
         }
 
-        public ScheduledPresentation GetScheduledPresentation(int scheduledPresentationId)
+        public Task<ScheduledPresentation> GetScheduledPresentationAsync(int scheduledPresentationId)
         {
-            return _presentationRepositoryStorage.GetScheduledPresentation(scheduledPresentationId);
+            return _presentationRepositoryStorage.GetScheduledPresentationAsync(scheduledPresentationId);
         }
 
-        public IEnumerable<ScheduledPresentation> GetScheduledPresentationsForPresentation(int presentationId)
+        public Task<IEnumerable<ScheduledPresentation>> GetScheduledPresentationsForPresentationAsync(int presentationId)
         {
-            return _presentationRepositoryStorage.GetScheduledPresentationsForPresentation(presentationId);
+            return _presentationRepositoryStorage.GetScheduledPresentationsForPresentationAsync(presentationId);
         }
 
-        public ScheduledPresentation SaveScheduledPresentation(ScheduledPresentation scheduledPresentation)
+        public Task<ScheduledPresentation> SaveScheduledPresentationAsync(ScheduledPresentation scheduledPresentation)
         {
-            return _presentationRepositoryStorage.SaveScheduledPresentation(scheduledPresentation);
+            return _presentationRepositoryStorage.SaveScheduledPresentationAsync(scheduledPresentation);
         }
     }
 }
