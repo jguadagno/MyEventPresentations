@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyEventPresentations.Domain.Interfaces;
-using MyEventPresentations.Domain.Models;
 
 namespace MyEventPresentations.Api.Controllers
 {

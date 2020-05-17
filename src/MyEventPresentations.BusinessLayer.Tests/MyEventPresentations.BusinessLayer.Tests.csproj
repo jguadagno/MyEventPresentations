@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\MyEventPresentations.BusinessLayer\MyEventPresentations.BusinessLayer.csproj" />
       <ProjectReference Include="..\MyEventPresentations.Domain\MyEventPresentations.Domain.csproj" />
     </ItemGroup>
 
