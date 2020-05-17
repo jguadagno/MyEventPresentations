@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -24,6 +25,25 @@ namespace MyEventPresentations.Api.Controllers
             return _presentationManager.GetScheduledPresentation(id);
         }
         
-        
+        [HttpPost]
+        public ActionResult<Domain.Models.ScheduledPresentation> SaveScheduledPresentation(Domain.Models.ScheduledPresentation scheduledPresentation)
+        {
+            try
+            {
+                var result = _presentationManager.SaveScheduledPresentation(scheduledPresentation);
+                if (result != null)
+                {
+                    return CreatedAtAction(nameof(Get), new {id = scheduledPresentation.ScheduledPresentationId},
+                        scheduledPresentation);
+                }
+                return Problem("Failed to insert the presentation");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to insert the presentation");
+                Console.WriteLine(e.ToString());
+                return Problem("Failed to insert the presentation");
+            }
+        }
     }
 }

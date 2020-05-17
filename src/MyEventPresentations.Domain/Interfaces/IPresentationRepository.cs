@@ -12,5 +12,6 @@ namespace MyEventPresentations.Domain.Interfaces
         public ScheduledPresentation GetScheduledPresentation(int scheduledPresentationId);
         public IEnumerable<ScheduledPresentation> GetScheduledPresentationsForPresentation(int presentationId);
         public bool DeletePresentation(int presentationId);
+        public ScheduledPresentation SaveScheduledPresentation(ScheduledPresentation scheduledPresentation);
     }
 }

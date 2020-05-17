@@ -250,5 +250,98 @@ namespace MyEventPresentations.BusinessLayer.Tests
                 Assert.Equal(1, scheduledPresentation.AttendeeCount);
             }
         }
+
+        [Fact]
+        public void SaveScheduledPresentation_WithNullScheduledPresentation_ShouldThrowException()
+        {
+            // Arrange
+            var presentationRepositoryMock = new Mock<IPresentationRepository>();
+            presentationRepositoryMock
+                .Setup(presentationRepository => presentationRepository.SaveScheduledPresentation(null));
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            
+            // Act
+            var ex = Assert.Throws<ArgumentNullException>(() => presentationManager.SaveScheduledPresentation(null));
+
+            // Assert
+            Assert.Equal("scheduledPresentation", ex.ParamName);
+            Assert.Equal("The scheduled presentation can not be null (Parameter 'scheduledPresentation')", ex.Message);
+        }
+        
+        [Fact]
+        public void SaveScheduledPresentation_WithNullPresentation_ShouldThrowException()
+        {
+            // Arrange
+            var presentationRepositoryMock = new Mock<IPresentationRepository>();
+            presentationRepositoryMock
+                .Setup(presentationRepository => presentationRepository.SaveScheduledPresentation(It.IsAny<ScheduledPresentation>()));
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            
+            var scheduledPresentation = new ScheduledPresentation
+            {
+                Presentation = null
+            };
+            
+            // Act
+            var ex = Assert.Throws<ArgumentNullException>(() => presentationManager.SaveScheduledPresentation(scheduledPresentation));
+
+            // Assert
+            Assert.Equal("Presentation", ex.ParamName);
+            Assert.Equal("The presentation can not be null (Parameter 'Presentation')", ex.Message);
+        }
+        
+        [Fact]
+        public void SaveScheduledPresentation_WithStartTimeGreaterThanEndTime_ShouldThrowException()
+        {
+            // Arrange
+            var presentationRepositoryMock = new Mock<IPresentationRepository>();
+            presentationRepositoryMock
+                .Setup(presentationRepository => presentationRepository.SaveScheduledPresentation(It.IsAny<ScheduledPresentation>()));
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var startTime = DateTime.Now;
+            
+            var scheduledPresentation = new ScheduledPresentation
+            {
+                Presentation = new Presentation(),
+                StartTime = startTime,
+                EndTime = startTime.AddMinutes(-1)
+            };
+            
+            // Act
+            var ex = Assert.Throws<ArgumentOutOfRangeException>(() => presentationManager.SaveScheduledPresentation(scheduledPresentation));
+
+            // Assert
+            Assert.Equal("StartTime", ex.ParamName);
+            Assert.Equal(startTime, ex.ActualValue);
+            Assert.StartsWith("The start time of the presentation can not be greater then the end time (Parameter 'StartTime')", ex.Message);
+        }
+
+        [Fact]
+        public void SaveScheduledPresentation_WithValidScheduledPresentation_ShouldReturnScheduledPresentation()
+        {
+            // Arrange
+            var presentationRepositoryMock = new Mock<IPresentationRepository>();
+            presentationRepositoryMock
+                .Setup(presentationRepository => presentationRepository.SaveScheduledPresentation(It.IsAny<ScheduledPresentation>()))
+                .Returns<ScheduledPresentation>((scheduledPresentationInput) => scheduledPresentationInput);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            
+            var startTime = DateTime.Now;
+            var scheduledPresentation = new ScheduledPresentation
+            {
+                Presentation = new Presentation(),
+                StartTime = startTime,
+                EndTime = startTime.AddMinutes(1)
+            };
+            
+            // Act
+            var savedScheduledPresentation = presentationManager.SaveScheduledPresentation(scheduledPresentation);
+            
+            // Assert
+            Assert.NotNull(savedScheduledPresentation);
+            Assert.NotNull(savedScheduledPresentation.Presentation);
+            Assert.Equal(scheduledPresentation.StartTime, savedScheduledPresentation.StartTime);
+            Assert.Equal(scheduledPresentation.EndTime, savedScheduledPresentation.EndTime);
+        }
     }
 }

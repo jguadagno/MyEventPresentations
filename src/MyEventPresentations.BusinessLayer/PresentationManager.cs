@@ -65,5 +65,29 @@ namespace MyEventPresentations.BusinessLayer
         {
             return _presentationRepository.GetScheduledPresentationsForPresentation(presentationId);
         }
+
+        public ScheduledPresentation SaveScheduledPresentation(ScheduledPresentation scheduledPresentation)
+        {
+            // Validate the fields
+            if (scheduledPresentation == null)
+            {
+                throw new ArgumentNullException(nameof(scheduledPresentation), "The scheduled presentation can not be null");
+            }
+
+            if (scheduledPresentation.Presentation == null)
+            {
+                throw new ArgumentNullException(nameof(scheduledPresentation.Presentation), "The presentation can not be null");
+            }
+            
+            // Rules validation
+            if (scheduledPresentation.StartTime > scheduledPresentation.EndTime)
+            {
+                throw new ArgumentOutOfRangeException(nameof(scheduledPresentation.StartTime),
+                    scheduledPresentation.StartTime,
+                    "The start time of the presentation can not be greater then the end time");
+            }
+
+            return _presentationRepository.SaveScheduledPresentation(scheduledPresentation);
+        }
     }
 }

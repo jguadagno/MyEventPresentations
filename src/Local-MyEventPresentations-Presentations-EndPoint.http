@@ -55,3 +55,27 @@ Content-Type: application/json
 
 ### Delete a Presentation
 DELETE https://localhost:5001/presentations/2
+
+### Save ScheduledPresentation
+POST https://localhost:5001/scheduledpresentations
+Content-Type: application/json
+
+{
+  "scheduledPresentationId": 0,
+  "presentationUri": "presentationUri-saved",
+  "videoStorageUri": "videoStorageUri-saved",
+  "videoUri": "videoUri-saved",
+  "attendeeCount": 500,
+  "startTime": "2020-05-17T18:00:00.000-07:00",
+  "endTime": "2020-05-17T19:00:00.000-07:00",
+  "roomName": "roomName-saved",
+  "presentation": {
+    "presentationId": 1,
+    "title": "Migrate It!",
+    "abstract": "Do you have an \"old\" .NET Framework App? Let's see how we can port it, migrate it, and/or upgrade it to us a combination of .NET Core and .NET Standard to modernize it.",
+    "moreInfoUri": "https://www.josephguadagno.net/presentations/migrate-it",
+    "sourceCodeRepositoryUri": "https://github.com/jguadagno/migrate-it",
+    "powerpointUri": "https://onedrive.live.com/embed?cid=406EE4C95978C038&resid=406EE4C95978C038%2176463&authkey=AInDP9QbEcT8bhc&em=2",
+    "videoUri": null
+  }
+}

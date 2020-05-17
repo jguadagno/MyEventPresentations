@@ -43,5 +43,10 @@ namespace MyEventPresentations.Data
         {
             return _presentationRepositoryStorage.GetScheduledPresentationsForPresentation(presentationId);
         }
+
+        public ScheduledPresentation SaveScheduledPresentation(ScheduledPresentation scheduledPresentation)
+        {
+            return _presentationRepositoryStorage.SaveScheduledPresentation(scheduledPresentation);
+        }
     }
 }
