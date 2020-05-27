@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Azure.Storage.Queues;
 using MyEventPresentations.Domain.Interfaces;
 using MyEventPresentations.Domain.Models;
 
@@ -15,7 +16,7 @@ namespace MyEventPresentations.BusinessLayer
             _presentationRepository = presentationRepository;
         }
         
-        public Task<Presentation> SavePresentationAsync(Presentation presentation)
+        public async Task<Presentation> SavePresentationAsync(Presentation presentation)
         {
             // Validate the fields
             if (presentation == null)
@@ -23,10 +24,10 @@ namespace MyEventPresentations.BusinessLayer
                 throw new ArgumentNullException(nameof(presentation), "The presentation can not be null");
             }
 
-            if (presentation.PresentationId <= 0)
+            if (presentation.PresentationId < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(presentation),
-                    "The presentation id can not be less than 1");
+                    "The presentation id can not be less than 0");
             }
 
             if (string.IsNullOrEmpty(presentation.Title))
@@ -39,7 +40,15 @@ namespace MyEventPresentations.BusinessLayer
                 throw new ArgumentNullException(nameof(presentation.Abstract), "The Abstract of the presentation can not be null");    
             }
 
-            return _presentationRepository.SavePresentationAsync(presentation);
+            var savedPresentation = await _presentationRepository.SavePresentationAsync(presentation);
+            
+            // TODO: Use the message
+            var addedPresentationMessage = new Domain.Models.Messages.Presentations.Added {PresentationId = savedPresentation.PresentationId};
+            
+            var queueClient = new QueueClient("UseDevelopmentStorage=true", Domain.Constants.QueueNames.Presentations.Added);
+            await queueClient.SendMessageAsync(savedPresentation.PresentationId.ToString());
+
+            return savedPresentation;
         }
 
         public Task<Presentation> GetPresentationAsync(int presentationId)
@@ -89,6 +98,7 @@ namespace MyEventPresentations.BusinessLayer
             }
 
             return _presentationRepository.SaveScheduledPresentationAsync(scheduledPresentation);
+
         }
     }
 }
