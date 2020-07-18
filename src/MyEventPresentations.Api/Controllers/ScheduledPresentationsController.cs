@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyEventPresentations.Domain.Interfaces;
@@ -19,13 +20,28 @@ namespace MyEventPresentations.Api.Controllers
             _presentationManager = presentationManager;
         }
         
+        /// <summary>
+        /// Gets an individual scheduled presentation
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns>The requests Scheduled Presentation</returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public Task<Domain.Models.ScheduledPresentation> Get(int id)
         {
             return _presentationManager.GetScheduledPresentationAsync(id);
         }
         
+        /// <summary>
+        /// Saves the scheduled presentation
+        /// </summary>
+        /// <remarks></remarks>
+        /// <returns></returns>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]        
         public async Task <ActionResult<Domain.Models.ScheduledPresentation>> SaveScheduledPresentation(Domain.Models.ScheduledPresentation scheduledPresentation)
         {
             try
