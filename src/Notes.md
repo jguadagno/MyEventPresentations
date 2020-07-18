@@ -17,10 +17,23 @@ Based off of [Create a web API](https://docs.microsoft.com/en-us/aspnet/core/tut
 
 Install [documentation](https://docs.microsoft.com/en-us/azure/storage/common/storage-use-azurite)
 
+```bash
+npm install -g azurite
+```
+
 Run Azurite
 
-```npm
+```bash
 azurite --silent --location c:\azurite --debug c:\azurite\debug.log
+```
+
+*Optional*: Add the following to your `.gitignore`
+
+```yaml
+# Azurite
+__blogstorage__/
+__queuestorage__/
+__azurite*.json
 ```
 
 ### Azurite Connections

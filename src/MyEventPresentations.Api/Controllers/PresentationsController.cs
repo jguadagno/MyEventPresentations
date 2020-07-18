@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MyEventPresentations.Domain.Interfaces;
@@ -21,26 +22,76 @@ namespace MyEventPresentations.Api.Controllers
             _presentationManager = presentationManager;
         }
 
+        /// <summary>
+        /// Gets all of the presentations
+        /// </summary>
+        /// <remarks>
+        /// Sample Request:
+        ///
+        ///     Get /presentations
+        /// </remarks>
+        /// <returns>A list of Presentations</returns>
         [HttpGet]
-        public async Task<IEnumerable<Domain.Models.Presentation>> GetAllPresentations()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IEnumerable<Presentation>> GetAllPresentations()
         {
             return await _presentationManager.GetPresentationsAsync();
         }
 
+        /// <summary>
+        /// Gets an individual presentation
+        /// </summary>
+        /// <remarks>
+        /// Sample Request
+        ///
+        /// GET /presentations/1
+        /// 
+        /// </remarks>
+        /// <returns>An individual presentation</returns>
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public Task<Presentation> GetPresentation(int id)
         {
             return _presentationManager.GetPresentationAsync(id);
         }
 
+        /// <summary>
+        /// Gets the schedule(s) for a given presentation
+        /// </summary>
+        /// <remarks>
+        /// Sample Request:
+        ///
+        /// GET /presentations/1/schedules
+        /// 
+        /// </remarks>
+        /// <returns></returns>
         [HttpGet("{id}/schedules")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public Task<IEnumerable<ScheduledPresentation>> GetScheduledPresentationsForPresentation(int id)
         {
             return _presentationManager.GetScheduledPresentationsForPresentationAsync(id);
         }
 
+        /// <summary>
+        /// Saves a presentation
+        /// </summary>
+        /// <remarks>
+        /// Sample Request:
+        ///
+        /// POST /presentations
+        /// {
+        ///
+        /// }
+        /// </remarks>
+        /// <returns>The result of the saving</returns>
         [HttpPost]
-        public async Task<ActionResult<Domain.Models.Presentation>> SavePresentation(Domain.Models.Presentation presentation)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
+        public async Task<ActionResult<Presentation>> SavePresentation(Presentation presentation)
         {
             try
             {
@@ -60,7 +111,22 @@ namespace MyEventPresentations.Api.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates an existing presentation
+        /// </summary>
+        /// <remarks>
+        /// Sample Request:
+        ///
+        /// PUT /presentations/1
+        /// {
+        ///
+        /// }
+        /// </remarks>
+        /// <returns>The status of the update</returns>
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<IActionResult> UpdatePresentation(Presentation presentation)
         {
             try
@@ -70,11 +136,8 @@ namespace MyEventPresentations.Api.Controllers
                 {
                     return NoContent();
                 }
-                else
-                {
-                    return Problem("Failed to update the presentation");
-                }
-                    
+                return Problem("Failed to update the presentation");
+
             }
             catch (Exception e)
             {
@@ -83,7 +146,20 @@ namespace MyEventPresentations.Api.Controllers
             }
         }
         
+        /// <summary>
+        /// Deletes a presentation
+        /// </summary>
+        /// <remarks>
+        /// Sample Request:
+        ///
+        /// DELETE /presentations/1
+        /// </remarks>
+        /// <returns>The status of the deletion</returns>
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesErrorResponseType(typeof(ProblemDetails))]
         public async Task<ActionResult> DeletePresentation(int id)
         {
             try
@@ -93,10 +169,8 @@ namespace MyEventPresentations.Api.Controllers
                 {
                     return NoContent();
                 }
-                else
-                {
-                    return NotFound();
-                }
+
+                return NotFound();
             }
             catch (Exception e)
             {
