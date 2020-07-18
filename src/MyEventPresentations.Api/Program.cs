@@ -18,6 +18,17 @@ namespace MyEventPresentations.Api
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((ctx, builder) =>
+                {
+                    builder.AddJsonFile("appsettings.json", true, true);
+                    if (ctx.HostingEnvironment.IsDevelopment())
+                    {
+                        builder.AddJsonFile(
+                            Environment.OSVersion.Platform == PlatformID.Win32NT
+                                ? $"appsettings.Development.Windows.json"
+                                : $"appsettings.Development.Mac.json", true, true);
+                    }
+                })
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }
 }
