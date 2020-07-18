@@ -9,4 +9,9 @@
         <ProjectReference Include="..\MyEventPresentations.Data\MyEventPresentations.Data.csproj" />
         <ProjectReference Include="..\MyEventPresentations.Domain\MyEventPresentations.Domain.csproj" />
     </ItemGroup>
+
+
+    <ItemGroup>
+      <PackageReference Include="Azure.Storage.Queues" Version="12.3.0" />
+    </ItemGroup>
 </Project>
