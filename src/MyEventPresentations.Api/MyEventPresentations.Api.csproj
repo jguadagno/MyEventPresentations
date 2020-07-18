@@ -8,6 +8,7 @@
       <ProjectReference Include="..\MyEventPresentations.BusinessLayer.Tests\MyEventPresentations.BusinessLayer.Tests.csproj" />
       <ProjectReference Include="..\MyEventPresentations.BusinessLayer\MyEventPresentations.BusinessLayer.csproj" />
       <ProjectReference Include="..\MyEventPresentations.Data.Sqlite\MyEventPresentations.Data.Sqlite.csproj" />
+      <ProjectReference Include="..\MyEventPresentations.Data.SqlServer\MyEventPresentations.Data.SqlServer.csproj" />
       <ProjectReference Include="..\MyEventPresentations.Data\MyEventPresentations.Data.csproj" />
       <ProjectReference Include="..\MyEventPresentations.Domain\MyEventPresentations.Domain.csproj" />
     </ItemGroup>

@@ -18,7 +18,10 @@ ProjectSection(SolutionItems) = preProject
 	Local-MyEventPresentations-Presentations-EndPoint.http = Local-MyEventPresentations-Presentations-EndPoint.http
 	readme.md = readme.md
 	..\readme.md = ..\readme.md
+	CreateDatabase-MSSQL.sql = CreateDatabase-MSSQL.sql
 EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyEventPresentations.Data.SqlServer", "MyEventPresentations.Data.SqlServer\MyEventPresentations.Data.SqlServer.csproj", "{67E0751F-AD3D-4A7D-BF7C-7E7A8C9875AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,5 +53,9 @@ Global
 		{9893451E-12A7-480A-8AA4-FE8734B59BC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9893451E-12A7-480A-8AA4-FE8734B59BC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9893451E-12A7-480A-8AA4-FE8734B59BC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67E0751F-AD3D-4A7D-BF7C-7E7A8C9875AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67E0751F-AD3D-4A7D-BF7C-7E7A8C9875AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67E0751F-AD3D-4A7D-BF7C-7E7A8C9875AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67E0751F-AD3D-4A7D-BF7C-7E7A8C9875AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

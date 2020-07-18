@@ -1,19 +1,13 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using MyEventPresentations.BusinessLayer;
 using MyEventPresentations.Data;
@@ -36,7 +30,8 @@ namespace MyEventPresentations.Api
         {
             services.AddControllers();
             services.AddDbContext<PresentationContext>(options =>
-                options.UseSqlite(Configuration.GetConnectionString("PresentationsDb")));
+                options.UseSqlServer(Configuration.GetConnectionString("PresentationsSqlDb")));
+                //options.UseSqlite(Configuration.GetConnectionString("PresentationsDb")));
 
             services.AddAutoMapper(typeof(PresentationRepositoryStorage));
             services.AddTransient<IPresentationManager, PresentationManager>();

@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="MyEventPresentations" uuid="7858c744-d4b3-4255-9d4d-0975c7107897">
+    <data-source source="LOCAL" name="MyEventPresentations-Local" uuid="b79970d8-7f27-4302-88f6-c2a625b8b77d">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/../../Databases/myeventpresentations.db</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="@localhost" uuid="2be8d907-f33f-4b51-b2ab-6148df04fcc1">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://localhost</jdbc-url>
     </data-source>
   </component>
 </project>
