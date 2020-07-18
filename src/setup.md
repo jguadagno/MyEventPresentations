@@ -1,6 +1,14 @@
-# Notes
+# Application Setup
 
-## Database Setup
+This document covers the technologies and setup required to get the application working.
+
+## API Design
+
+Based off of [Create a web API](https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api) and [Web API with MongoDB](https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app)
+
+## Database 
+
+### Sqlite Setup
 
 Start from the `MyEventPresentations.Data.Sqlite` folder
 
@@ -9,7 +17,13 @@ dotnet ef migrations add InitialCreate --startup-project ../MyEventPresentations
 dotnet ef database update --startup-project ../MyEventPresentations.Api
 ```
 
-### SQL Server Database Creation
+### Microsoft SQL Server 
+
+#### Database Creation
+
+**Note** You can also use the [CreateDatabase-MSSQL.sql](CreateDatabase-MSSQL.sql) script.
+
+**Note** You will need to replace the password for `MyEventPresentations_User`.
 
 ```tsql
 CREATE DATABASE MyEventPresentations
@@ -44,14 +58,14 @@ exec sp_addrolemember 'db_datawriter', 'MyEventPresentations_User'
 GO
 ```
 
-### Table Creation
+#### Table Creation
 
 ```tsql
 create table Presentations
 (
 	PresentationId INT IDENTITY 
-		constraint PK_Presentations
-            PRIMARY KEY not null,
+        constraint PK_Presentations
+        PRIMARY KEY not null,
 	Title VARCHAR(255) NULL,
 	Abstract VARCHAR(4096) NULL,
 	MoreInfoUri VARCHAR(512) NULL,
@@ -63,12 +77,12 @@ create table Presentations
 create table ScheduledPresentations
 (
 	ScheduledPresentationId INT IDENTITY
-		constraint PK_ScheduledPresentations
-			primary key NOT NULL,
+        constraint PK_ScheduledPresentations
+        primary key NOT NULL,
 	PresentationId INTEGER
-		constraint FK_ScheduledPresentations_Presentations_PresentationId
-			references Presentations (PresentationId)
-				on delete CASCADE,
+        constraint FK_ScheduledPresentations_Presentations_PresentationId
+        references Presentations (PresentationId)
+            on delete CASCADE,
 	PresentationUri VARCHAR(512) NULL,
 	VideoStorageUri VARCHAR(512) NULL,
 	VideoUri VARCHAR(512) NULL,
@@ -84,15 +98,11 @@ create index IX_ScheduledPresentations_PresentationId
 create table __EFMigrationsHistory
 (
 	MigrationId VARCHAR(256) not null
-		constraint PK___EFMigrationsHistory
-			primary key,
+        constraint PK___EFMigrationsHistory
+        primary key,
 	ProductVersion VARCHAR(MAX) not null
 );
 ```
-
-## API Design
-
-Based off of [Create a web API](https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-web-api) and [Web API with MongoDB](https://docs.microsoft.com/en-us/aspnet/core/tutorials/first-mongo-app)
 
 ## Azurite
 

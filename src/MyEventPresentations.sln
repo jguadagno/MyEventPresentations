@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyEventPresentations.Api", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InstallDocs", "InstallDocs", "{6EF05764-0584-4D6A-BFF3-BEED125C5802}"
 ProjectSection(SolutionItems) = preProject
-	Notes.md = Notes.md
+	setup.md = setup.md
 	Local-MyEventPresentations-Presentations-EndPoint.http = Local-MyEventPresentations-Presentations-EndPoint.http
 	readme.md = readme.md
 	..\readme.md = ..\readme.md
