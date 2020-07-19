@@ -1,0 +1,66 @@
+@model MyEventPresentations.Domain.Models.Presentation
+
+@{
+    if (Model == null)
+    {
+        ViewData["Title"] = "Presentation Not Found";
+    }
+    else
+    {
+        ViewData["Title"] = "Presentation - " + Model.Title;
+    }
+}
+
+@if (Model == null)
+{
+    <p class="alert alert-warning">There was no presentation found with this id.</p>
+}
+else
+{
+    <h1 class="display-1">@Model.Title</h1>
+    <p class="lead">@Model.Abstract</p>
+
+    <h2>Links</h2>
+    <dl class="row">
+        <dt class="col-sm-3">PowerPoint</dt>
+        <dd class="col-sm-9"><a href="@Model.PowerpointUri" target="_blank">@Model.PowerpointUri</a></dd>
+        <dt class="col-sm-3">Source Code</dt>
+        <dd class="col-sm-9"><a href="@Model.SourceCodeRepositoryUri" target="_blank">@Model.SourceCodeRepositoryUri</a></dd>
+        <dt class="col-sm-3">Video</dt>
+        <dd class="col-sm-9"><a href="@Model.VideoUri" target="_blank">@Model.VideoUri</a></dd>
+        <dt class="col-sm-3">More Info</dt>
+        <dd class="col-sm-9"><a href="@Model.MoreInfoUri" target="_blank">@Model.MoreInfoUri</a></dd>
+    </dl>
+
+    <h2>Scheduled</h2>
+    
+    if (Model.ScheduledPresentations == null || Model.ScheduledPresentations.Count == 0)
+    {
+        <p>The presentation has not been scheduled yet</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Presentation Url</th>
+                <th scope="col">Start Time</th>
+                <th scope="col">End Time</th>
+                <th scope="col">Room Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var schedule in Model.ScheduledPresentations)
+            {
+                <tr>
+                    <td><a asp-controller="Presentations" asp-action="Scheduled" asp-route-id="@schedule.ScheduledPresentationId">@schedule.ScheduledPresentationId</a></td>
+                    <td><a href="@schedule.PresentationUri" target="_blank">@schedule.PresentationUri</a></td>
+                    <td>@schedule.StartTime</td>
+                    <td>@schedule.EndTime</td>
+                    <td>@schedule.RoomName</td></tr>
+            }
+            </tbody>
+        </table>
+    }
+}

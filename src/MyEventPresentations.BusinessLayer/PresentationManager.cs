@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Storage.Queues;
+using JosephGuadagno.AzureHelpers.Storage.Interfaces;
 using MyEventPresentations.Domain.Interfaces;
 using MyEventPresentations.Domain.Models;
 
@@ -10,10 +12,12 @@ namespace MyEventPresentations.BusinessLayer
     public class PresentationManager: IPresentationManager
     {
         private readonly IPresentationRepository _presentationRepository;
+        private readonly IQueue _queue;
 
-        public PresentationManager(IPresentationRepository presentationRepository)
+        public PresentationManager(IPresentationRepository presentationRepository, IQueue queue)
         {
             _presentationRepository = presentationRepository;
+            _queue = queue;
         }
         
         public async Task<Presentation> SavePresentationAsync(Presentation presentation)
@@ -42,11 +46,9 @@ namespace MyEventPresentations.BusinessLayer
 
             var savedPresentation = await _presentationRepository.SavePresentationAsync(presentation);
             
-            // TODO: Use the message
             var addedPresentationMessage = new Domain.Models.Messages.Presentations.Added {PresentationId = savedPresentation.PresentationId};
-            
-            var queueClient = new QueueClient("UseDevelopmentStorage=true", Domain.Constants.QueueNames.Presentations.Added);
-            await queueClient.SendMessageAsync(savedPresentation.PresentationId.ToString());
+            var messageAsJson = JsonSerializer.Serialize(addedPresentationMessage);
+            await _queue.AddMessageAsync(messageAsJson);
 
             return savedPresentation;
         }

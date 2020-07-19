@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using JosephGuadagno.AzureHelpers.Storage.Interfaces;
 using Moq;
 using MyEventPresentations.Domain.Interfaces;
 using MyEventPresentations.Domain.Models;
@@ -15,10 +16,11 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task SavePresentation_WithNullPresentation_ShouldThrowException()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock.Setup(presentationRepository =>
                 presentationRepository.SavePresentationAsync(It.IsAny<Presentation>()));
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
 
             // Act
             var ex = await
@@ -33,10 +35,11 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task SavePresentation_WithPresentationIdLessThanOne_ShouldThrowException()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock.Setup(presentationRepository =>
                 presentationRepository.SavePresentationAsync(It.IsAny<Presentation>()));
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
             var presentation = new Presentation
                 {PresentationId = 0, Abstract = "Abstract", Title = "Title", PowerpointUri = "PowerpointUri"};
 
@@ -54,10 +57,11 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task SavePresentation_WithNullTitle_ShouldThrowException()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock.Setup(presentationRepository =>
                 presentationRepository.SavePresentationAsync(It.IsAny<Presentation>()));
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
             var presentation = new Presentation
                 {PresentationId = 1, Abstract = "Abstract", Title = null, PowerpointUri = "PowerpointUri"};
 
@@ -75,10 +79,11 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task SavePresentation_WithNullAbstract_ShouldThrowException()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock.Setup(presentationRepository =>
                 presentationRepository.SavePresentationAsync(It.IsAny<Presentation>()));
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
             var presentation = new Presentation
                 {PresentationId = 1, Abstract = null, Title = "Title", PowerpointUri = "PowerpointUri"};
 
@@ -96,11 +101,12 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task SavePresentation_WithValidPresentation_ShouldReturnPresentation()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock.Setup(presentationRepository =>
                     presentationRepository.SavePresentationAsync(It.IsAny<Presentation>()))
                 .ReturnsAsync((Presentation presentationInput) => presentationInput);
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
             var presentation = new Presentation
                 {PresentationId = 1, Abstract = "Abstract", Title = "Title", PowerpointUri = "PowerpointUri"};
 
@@ -119,6 +125,7 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task GetPresentation_ShouldReturnPresentation()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock.Setup(presentationRepository =>
                     presentationRepository.GetPresentationAsync(It.IsAny<int>()))
@@ -130,7 +137,7 @@ namespace MyEventPresentations.BusinessLayer.Tests
                     PowerpointUri = "PowerpointUri",
                 });
 
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
             var presentationId = 15; // any Random Number will do
 
             // Act
@@ -148,6 +155,7 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task GetPresentations_ShouldReturnListOfPresentations()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock.Setup(presentationRepository => presentationRepository.GetPresentationsAsync())
                 .ReturnsAsync(new List<Presentation>
@@ -158,7 +166,7 @@ namespace MyEventPresentations.BusinessLayer.Tests
                         {PresentationId = 2, Abstract = "Abstract", Title = "Title", PowerpointUri = "PowerpointUri"},
                 });
 
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
 
             // Act
             var presentations = await presentationManager.GetPresentationsAsync();
@@ -182,11 +190,12 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task DeletePresentation_ShouldReturnTrue()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
                 .Setup(presentationRepository => presentationRepository.DeletePresentationAsync(It.IsAny<int>()))
                 .ReturnsAsync(true);
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
 
             // Act
             var deletedPresentation = await presentationManager.DeletePresentationAsync(1); // Any number
@@ -199,6 +208,7 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task GetScheduledPresentation_ShouldReturnAScheduledPresentations()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
                 .Setup(presentationRepository => presentationRepository.GetScheduledPresentationAsync(It.IsAny<int>()))
@@ -206,7 +216,7 @@ namespace MyEventPresentations.BusinessLayer.Tests
                 {
                     ScheduledPresentationId = 1, AttendeeCount = 1, Presentation = new Presentation()
                 });
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
 
             // Act
             var scheduledPresentation = await presentationManager.GetScheduledPresentationAsync(1);
@@ -222,6 +232,7 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task GetScheduledPresentation_ShouldReturnAListScheduledPresentations()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
                 .Setup(presentationRepository =>
@@ -239,7 +250,7 @@ namespace MyEventPresentations.BusinessLayer.Tests
                         Presentation = new Presentation {PresentationId = presentationIdInput}
                     }
                 });
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
             var presentationId = 15; // Can be any int
 
             // Act
@@ -264,10 +275,11 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task SaveScheduledPresentation_WithNullScheduledPresentation_ShouldThrowException()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
                 .Setup(presentationRepository => presentationRepository.SaveScheduledPresentationAsync(null));
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
 
             // Act
             var ex = await Assert.ThrowsAsync<ArgumentNullException>(() =>
@@ -282,11 +294,12 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task SaveScheduledPresentation_WithNullPresentation_ShouldThrowException()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
                 .Setup(presentationRepository =>
                     presentationRepository.SaveScheduledPresentationAsync(It.IsAny<ScheduledPresentation>()));
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
 
             var scheduledPresentation = new ScheduledPresentation
             {
@@ -306,11 +319,12 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task SaveScheduledPresentation_WithStartTimeGreaterThanEndTime_ShouldThrowException()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
                 .Setup(presentationRepository =>
                     presentationRepository.SaveScheduledPresentationAsync(It.IsAny<ScheduledPresentation>()));
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
             var startTime = DateTime.Now;
 
             var scheduledPresentation = new ScheduledPresentation
@@ -336,12 +350,13 @@ namespace MyEventPresentations.BusinessLayer.Tests
         public async Task SaveScheduledPresentation_WithValidScheduledPresentation_ShouldReturnScheduledPresentation()
         {
             // Arrange
+            var queueMock = new Mock<IQueue>();
             var presentationRepositoryMock = new Mock<IPresentationRepository>();
             presentationRepositoryMock
                 .Setup(presentationRepository =>
                     presentationRepository.SaveScheduledPresentationAsync(It.IsAny<ScheduledPresentation>()))
                 .ReturnsAsync((ScheduledPresentation scheduledPresentationInput) => scheduledPresentationInput);
-            var presentationManager = new PresentationManager(presentationRepositoryMock.Object);
+            var presentationManager = new PresentationManager(presentationRepositoryMock.Object, queueMock.Object);
 
             var startTime = DateTime.Now;
             var scheduledPresentation = new ScheduledPresentation

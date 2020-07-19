@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Reflection;
 using AutoMapper;
+using JosephGuadagno.AzureHelpers.Storage;
+using JosephGuadagno.AzureHelpers.Storage.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,10 +11,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using MyEventPresentations.Api.Models;
 using MyEventPresentations.BusinessLayer;
 using MyEventPresentations.Data;
-using MyEventPresentations.Data.Sqlite;
+using MyEventPresentations.Data.SqlServer;
 using MyEventPresentations.Domain.Interfaces;
+using MyEventPresentations.Domain.Models;
+using Newtonsoft.Json;
 
 namespace MyEventPresentations.Api
 {
@@ -28,7 +33,24 @@ namespace MyEventPresentations.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddSingleton<IAzureConfiguration, AzureConfiguration>(provider =>
+            {
+                var azureConfiguration = new AzureConfiguration();
+                Configuration.Bind("AzureConfiguration", azureConfiguration);
+                return azureConfiguration;
+            });
+
+            services.AddSingleton<IQueue, Queue>(provider =>
+            {
+                var azure = provider.GetService<IAzureConfiguration>();
+                return new Queue(azure.AzureWebJobsStorage, Domain.Constants.QueueNames.Presentations.Added);
+            });
+            
+            services.AddControllers()
+                .AddNewtonsoftJson(o =>
+                {
+                    o.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
             services.AddDbContext<PresentationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("PresentationsSqlDb")));
                 //options.UseSqlite(Configuration.GetConnectionString("PresentationsDb")));

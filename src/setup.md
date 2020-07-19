@@ -133,3 +133,7 @@ To use locally, Azurite supports the well known [storage account and key](https:
 
 * Account name: `devstoreaccount1`
 * Account key: `Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==`
+
+## Queues
+
+ `presentation-added`: A new message is created whenever a presentation is added

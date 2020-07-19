@@ -57,7 +57,7 @@ namespace MyEventPresentations.Data.Sqlite
             await using (_presentationContext)
             {
                 var presentation = 
-                    _presentationContext.Presentations.FirstOrDefaultAsync(p => p.PresentationId == presentationId);
+                    await _presentationContext.Presentations.FirstOrDefaultAsync(p => p.PresentationId == presentationId);
                 return _mapper.Map<Presentation>(presentation);
             }
         }
@@ -90,7 +90,7 @@ namespace MyEventPresentations.Data.Sqlite
         {
             await using (_presentationContext)
             {
-                var presentation = _presentationContext.ScheduledPresentations
+                var presentation = await _presentationContext.ScheduledPresentations
                     .FirstOrDefaultAsync(p => p.ScheduledPresentationId == scheduledPresentationId);
                 return _mapper.Map<ScheduledPresentation>(presentation);
             }
@@ -101,7 +101,7 @@ namespace MyEventPresentations.Data.Sqlite
             await using (_presentationContext)
             {
                 var presentations =
-                    _presentationContext.ScheduledPresentations
+                    await _presentationContext.ScheduledPresentations
                         .Where(p => p.Presentation.PresentationId == presentationId).ToListAsync();
                 return _mapper.Map<List<ScheduledPresentation>>(presentations);
             }

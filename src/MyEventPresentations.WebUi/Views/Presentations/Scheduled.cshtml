@@ -1,0 +1,51 @@
+@model MyEventPresentations.Domain.Models.ScheduledPresentation
+
+@{
+    if (Model == null)
+    {
+        ViewData["Title"] = "Schedule Not Found";
+    }
+    else
+    {
+        var presentationTitle ="";
+        if (Model.Presentation != null)
+        {
+            presentationTitle = " for " + Model.Presentation.Title;
+        }
+        ViewData["Title"] = $"Schedule{presentationTitle}";
+    }
+}
+
+@if (Model == null)
+{
+    <p class="alert alert-warning">There was no scheduled presentation found with this id.</p>
+}
+else
+{
+    if (Model.Presentation != null)
+    {
+        <h1 class="display-1">@Model.Presentation.Title</h1>
+        <p class="lead">@Model.Presentation.Abstract</p>                                               
+    }
+    <h2>Schedule</h2>
+    <dl class="row">
+        <dt class="col-sm-3">Start Time</dt>
+        <dd class="col-sm-9">@Model.StartTime</dd>
+        <dt class="col-sm-3">End Time</dt>
+        <dd class="col-sm-9">@Model.EndTime</dd>
+        <dt class="col-sm-3">Room</dt>
+        <dd class="col-sm-9">@Model.RoomName</dd>
+        <dt class="col-sm-3">Presentation Uri</dt>
+        <dt class="col-sm-9"><a href="@Model.PresentationUri" target="_blank">@Model.PresentationUri</a> </dt>
+    </dl>
+    
+    <h2>Stats</h2>
+    <dl class="row">
+        <dt class="col-sm-3">Attendee Count</dt>
+        <dd class="col-sm-9">@Model.AttendeeCount</dd>
+        <dt class="col-sm-3">Video</dt>
+        <dd class="col-sm-9"><a href="@Model.VideoUri" target="_blank">@Model.VideoUri</a></dd>
+        <dt class="col-sm-3">Video Storage</dt>
+        <dd class="col-sm-9"><a href="@Model.VideoStorageUri" target="_blank">@Model.VideoStorageUri</a></dd>
+    </dl>
+}

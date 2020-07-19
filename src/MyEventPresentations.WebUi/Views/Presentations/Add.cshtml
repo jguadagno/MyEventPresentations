@@ -1,0 +1,47 @@
+@model MyEventPresentations.Domain.Models.Presentation
+
+@{
+    ViewData["Title"] = "Create a Presentation";
+}
+
+<h1>Add a new Presentation</h1>
+<p class="lead">Enter all the details about the presentation</p>
+
+<form asp-action="Add">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="PresentationId" />
+    
+    <div class="form-group">
+        <label class="control-label">Title</label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Abstract</label>
+        <input asp-for="Abstract" class="form-control" />
+        <span asp-validation-for="Abstract" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">More Information Uri</label>
+        <input asp-for="MoreInfoUri" class="form-control" />
+        <span asp-validation-for="MoreInfoUri" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Source Code Repository</label>
+        <input asp-for="SourceCodeRepositoryUri" class="form-control" />
+        <span asp-validation-for="SourceCodeRepositoryUri" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">PowerPoint Uri</label>
+        <input asp-for="PowerpointUri" class="form-control" />
+        <span asp-validation-for="PowerpointUri" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label class="control-label">Video Uri</label>
+        <input asp-for="VideoUri" class="form-control" />
+        <span asp-validation-for="VideoUri" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">
+    Save
+    </button>
+</form>

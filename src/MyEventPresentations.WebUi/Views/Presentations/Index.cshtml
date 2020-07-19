@@ -1,0 +1,27 @@
+@model List<MyEventPresentations.Domain.Models.Presentation>
+
+@{
+    ViewData["Title"] = "Presentations";
+}
+
+<table class="table table-striped">
+    <thead class="thead-dark">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Title</th>
+        <th scope="col">Abstract</th>
+        <th scope="col">More Info</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var presentation in Model)
+    {
+        <tr>
+            <td><a asp-controller="Presentations" asp-action="Details" asp-route-id="@presentation.PresentationId">@presentation.PresentationId</a></td>
+            <td>@presentation.Title</td>
+            <td>@presentation.Abstract</td>
+            <td><a href="@presentation.MoreInfoUri" target="_blank">@presentation.MoreInfoUri</a></td>
+        </tr>
+    }
+    </tbody>
+</table>

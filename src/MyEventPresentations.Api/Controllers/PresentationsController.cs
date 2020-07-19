@@ -98,7 +98,8 @@ namespace MyEventPresentations.Api.Controllers
                 var result = await _presentationManager.SavePresentationAsync(presentation);
                 if (result != null)
                 {
-                    return CreatedAtAction(nameof(GetPresentation), new {id = presentation.PresentationId},
+                    return CreatedAtAction(nameof(GetPresentation), 
+                        new {id = presentation.PresentationId},
                         presentation);
                 }
                 return Problem("Failed to insert the presentation");

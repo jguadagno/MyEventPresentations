@@ -18,6 +18,7 @@ namespace MyEventPresentations.Domain.Models
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public string RoomName { get; set; }
+        public int PresentationId { get; set; }
         public Presentation Presentation { get; set; }
         // TODO: Maybe add Presentation Status: Submitted, Approved, Denied, Delivered?
     }

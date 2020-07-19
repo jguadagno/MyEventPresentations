@@ -7,11 +7,11 @@
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/../../Databases/myeventpresentations.db</jdbc-url>
     </data-source>
-    <data-source source="LOCAL" name="MyEventPresentations-Local" uuid="2be8d907-f33f-4b51-b2ab-6148df04fcc1">
+    <data-source source="LOCAL" name="MyEventPresentations-Sql-Local" uuid="2be8d907-f33f-4b51-b2ab-6148df04fcc1">
       <driver-ref>sqlserver.ms</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
-      <jdbc-url>jdbc:sqlserver://localhost</jdbc-url>
+      <jdbc-url>jdbc:sqlserver://localhost;database=MyEventPresentations</jdbc-url>
     </data-source>
   </component>
 </project>
