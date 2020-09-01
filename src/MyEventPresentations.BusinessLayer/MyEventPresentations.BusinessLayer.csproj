@@ -6,6 +6,7 @@
 
 
     <ItemGroup>
+        <ProjectReference Include="..\MyEventPresentations.Data.Queueing\MyEventPresentations.Data.Queueing.csproj" />
         <ProjectReference Include="..\MyEventPresentations.Data\MyEventPresentations.Data.csproj" />
         <ProjectReference Include="..\MyEventPresentations.Domain\MyEventPresentations.Domain.csproj" />
     </ItemGroup>

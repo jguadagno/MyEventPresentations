@@ -28,7 +28,7 @@ namespace MyEventPresentations.Api.Controllers
         /// <remarks>
         /// Sample Request:
         ///
-        ///     Get /presentations
+        /// GET /presentations
         /// </remarks>
         /// <returns>A list of Presentations</returns>
         [HttpGet]

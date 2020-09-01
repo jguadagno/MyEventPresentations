@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Threading.Tasks;
-using Azure.Storage.Queues;
-using JosephGuadagno.AzureHelpers.Storage.Interfaces;
+using MyEventPresentations.Data.Queueing.Queues;
 using MyEventPresentations.Domain.Interfaces;
 using MyEventPresentations.Domain.Models;
 
@@ -12,12 +10,16 @@ namespace MyEventPresentations.BusinessLayer
     public class PresentationManager: IPresentationManager
     {
         private readonly IPresentationRepository _presentationRepository;
-        private readonly IQueue _queue;
+        private readonly PresentationAddedQueue _presentationAddedQueue;
+        private readonly PresentationScheduleAddedQueue _presentationScheduleAddedQueue;
 
-        public PresentationManager(IPresentationRepository presentationRepository, IQueue queue)
+        public PresentationManager(IPresentationRepository presentationRepository,
+            PresentationAddedQueue presentationAddedQueue,
+            PresentationScheduleAddedQueue presentationScheduleAddedQueue)
         {
             _presentationRepository = presentationRepository;
-            _queue = queue;
+            _presentationAddedQueue = presentationAddedQueue;
+            _presentationScheduleAddedQueue = presentationScheduleAddedQueue;
         }
         
         public async Task<Presentation> SavePresentationAsync(Presentation presentation)
@@ -47,38 +49,37 @@ namespace MyEventPresentations.BusinessLayer
             var savedPresentation = await _presentationRepository.SavePresentationAsync(presentation);
             
             var addedPresentationMessage = new Domain.Models.Messages.Presentations.Added {PresentationId = savedPresentation.PresentationId};
-            var messageAsJson = JsonSerializer.Serialize(addedPresentationMessage);
-            await _queue.AddMessageAsync(messageAsJson);
+            await _presentationAddedQueue.AddMessageAsync(addedPresentationMessage);
 
             return savedPresentation;
         }
 
-        public Task<Presentation> GetPresentationAsync(int presentationId)
+        public async Task<Presentation> GetPresentationAsync(int presentationId)
         {
-            return _presentationRepository.GetPresentationAsync(presentationId);
+            return await _presentationRepository.GetPresentationAsync(presentationId);
         }
 
-        public Task<IEnumerable<Presentation>> GetPresentationsAsync()
+        public async Task<IEnumerable<Presentation>> GetPresentationsAsync()
         {
-            return _presentationRepository.GetPresentationsAsync();
+            return await _presentationRepository.GetPresentationsAsync();
         }
 
-        public Task<bool> DeletePresentationAsync(int id)
+        public async Task<bool> DeletePresentationAsync(int id)
         {
-            return _presentationRepository.DeletePresentationAsync(id);
+            return await _presentationRepository.DeletePresentationAsync(id);
         }
 
-        public Task<ScheduledPresentation> GetScheduledPresentationAsync(int scheduledPresentationId)
+        public async Task<ScheduledPresentation> GetScheduledPresentationAsync(int scheduledPresentationId)
         {
-            return _presentationRepository.GetScheduledPresentationAsync(scheduledPresentationId);
+            return await _presentationRepository.GetScheduledPresentationAsync(scheduledPresentationId);
         }
 
-        public Task<IEnumerable<ScheduledPresentation>> GetScheduledPresentationsForPresentationAsync(int presentationId)
+        public async Task<IEnumerable<ScheduledPresentation>> GetScheduledPresentationsForPresentationAsync(int presentationId)
         {
-            return _presentationRepository.GetScheduledPresentationsForPresentationAsync(presentationId);
+            return await _presentationRepository.GetScheduledPresentationsForPresentationAsync(presentationId);
         }
 
-        public Task<ScheduledPresentation> SaveScheduledPresentationAsync(ScheduledPresentation scheduledPresentation)
+        public async Task<ScheduledPresentation> SaveScheduledPresentationAsync(ScheduledPresentation scheduledPresentation)
         {
             // Validate the fields
             if (scheduledPresentation == null)
@@ -99,8 +100,12 @@ namespace MyEventPresentations.BusinessLayer
                     "The start time of the presentation can not be greater then the end time");
             }
 
-            return _presentationRepository.SaveScheduledPresentationAsync(scheduledPresentation);
+            var savedScheduledPresentation =  await _presentationRepository.SaveScheduledPresentationAsync(scheduledPresentation);
 
+            var addedPresentationMessage = new Domain.Models.Messages.Presentations.Added {PresentationId = savedScheduledPresentation.PresentationId};
+            await _presentationScheduleAddedQueue.AddMessageAsync(addedPresentationMessage);
+
+            return savedScheduledPresentation;
         }
     }
 }

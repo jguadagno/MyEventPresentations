@@ -14,6 +14,7 @@ using Microsoft.OpenApi.Models;
 using MyEventPresentations.Api.Models;
 using MyEventPresentations.BusinessLayer;
 using MyEventPresentations.Data;
+using MyEventPresentations.Data.Queueing.Queues;
 using MyEventPresentations.Data.SqlServer;
 using MyEventPresentations.Domain.Interfaces;
 using MyEventPresentations.Domain.Models;
@@ -40,10 +41,15 @@ namespace MyEventPresentations.Api
                 return azureConfiguration;
             });
 
-            services.AddSingleton<IQueue, Queue>(provider =>
+            services.AddSingleton<PresentationAddedQueue>(provider =>
             {
                 var azure = provider.GetService<IAzureConfiguration>();
-                return new Queue(azure.AzureWebJobsStorage, Domain.Constants.QueueNames.Presentations.Added);
+                return new PresentationAddedQueue(azure.AzureWebJobsStorage);
+            });
+            services.AddSingleton<PresentationScheduleAddedQueue>(provider =>
+            {
+                var azure = provider.GetService<IAzureConfiguration>();
+                return new PresentationScheduleAddedQueue(azure.AzureWebJobsStorage);
             });
             
             services.AddControllers()
